@@ -6,6 +6,7 @@
     "dev": "node scripts/copy-images.mjs && next dev --turbopack",
     "build": "node scripts/copy-images.mjs && next build --turbopack",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
     "db:push": "prisma db push",
