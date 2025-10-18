@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import stripe from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 type Item = {
@@ -7,8 +7,12 @@ type Item = {
   quantity: number;
 };
 
+// Ensure this route is always dynamic and never statically evaluated at build time
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
+    const stripe = getStripe();
     // Basic origin check (helps CSRF mitigation in addition to same-site cookies)
     const origin = req.headers.get("origin") || req.headers.get("referer") || "";
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

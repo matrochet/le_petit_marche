@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import stripe from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 type Item = {
@@ -7,8 +7,12 @@ type Item = {
   quantity: number;
 };
 
+// Ensure this route is always dynamic and never statically evaluated at build time
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
+    const stripe = getStripe();
     const body = (await req.json()) as { items: Item[] };
     if (!body?.items || !Array.isArray(body.items) || body.items.length === 0) {
       return NextResponse.json({ error: "Panier vide" }, { status: 400 });
