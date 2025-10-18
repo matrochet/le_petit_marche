@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  /* Fresh, airy background and readable foreground */
+  --background: #f6fff8; /* mint-50 */
+  --foreground: #0f172a; /* slate-900 */
+}
+
+/* Custom CSS variables exposed for Tailwind usage via arbitrary values */
+
+/* Keep a fresh light background even if the OS prefers dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #f6fff8; /* mint-50 */
+    --foreground: #0f172a; /* keep text dark for contrast on light bg */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  color-scheme: light;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Subtle animation helpers */
+.fade-in {
+  animation: fade-in 250ms ease-out both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Card polish helper removed; use inline utilities for better tree-shaking */
