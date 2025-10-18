@@ -104,6 +104,20 @@ npm run start
 
 Pensez à configurer les variables d’environnement Stripe en prod.
 
+### Mode portfolio (clés Stripe de test en prod)
+
+Ce projet peut être déployé en production avec des clés Stripe de test (pk_test_/sk_test_) afin de présenter le flux de paiement sans encaisser de vrais paiements. Implications :
+
+- Les cartes réelles échouent; utilisez les cartes de test Stripe (ex : 4242 4242 4242 4242).
+- Le tableau de bord Stripe doit être en « Test mode » pour voir les paiements.
+- Un badge « Mode test Stripe » s’affiche dans l’interface pour plus de transparence.
+
+Pour passer à de vrais paiements ultérieurement :
+
+1. Remplacez `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` par une clé `pk_live_...` et `STRIPE_SECRET_KEY` par `sk_live_...`.
+2. Re-déployez l’application.
+3. (Si webhooks) Configurez l’endpoint webhook en « live » et mettez à jour `STRIPE_WEBHOOK_SECRET`.
+
 ## Ouvrir la base de données (SQLite)
 
 La base locale est SQLite: `prisma/dev.db` (cf. `prisma/schema.prisma`).

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import DemoNotice from "@/components/demo-notice";
 // Using public image URLs stored in DB
 
 export const metadata = {
@@ -29,6 +30,11 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
+      <div className="max-w-5xl mx-auto px-4 sm:px-0 mt-4">
+        {/* Transparence: mention du mode démonstration */}
+        {/* Affiché uniquement si Stripe est en mode test */}
+        <DemoNotice />
+      </div>
       {/* Hero */}
       <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-6 sm:p-10">
         <div className="grid md:grid-cols-2 gap-6 items-center">

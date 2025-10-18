@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useCartStore } from "@/store/cart-store";
+import DemoNotice from "@/components/demo-notice";
 
 // Create the Stripe promise only if a publishable key is present to avoid
 // runtime errors like "Cannot read properties of undefined (reading 'match')".
@@ -125,6 +126,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen p-6 sm:p-10">
       <h1 className="text-2xl font-bold mb-4">Paiement</h1>
+      <DemoNotice className="mb-4" />
       <div className="text-lg font-medium mb-4">Total: {total.toFixed(2)} €</div>
       {error && (
         <div className="text-sm text-red-600 mb-4">

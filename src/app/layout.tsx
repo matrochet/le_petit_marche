@@ -9,6 +9,7 @@ import { SEO, jsonLdScript, websiteJsonLd, organizationJsonLd } from "@/componen
 import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 import ClientYear from "@/components/client-year";
+import TestModeBadge from "@/components/test-mode-badge";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,6 +89,7 @@ export default function RootLayout({
           )}
         </SEO>
   <PromoBanner />
+  <TestModeBadge />
         <Providers>
           <SiteHeader />
         </Providers>
@@ -112,6 +114,13 @@ export default function RootLayout({
                 <li><Link className="hover:underline" href="/">Accueil</Link></li>
                 <li><Link className="hover:underline" href="/cart">Panier</Link></li>
                 <li><Link className="hover:underline" href="/checkout">Paiement</Link></li>
+                {process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.startsWith("pk_test_") && (
+                  <li>
+                    <Link className="hover:underline" href="/a-propos-du-mode-demo">
+                      À propos du mode démo
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <div>
@@ -137,6 +146,16 @@ export default function RootLayout({
               <span>© <ClientYear /> Le Petit Marché</span>
               <span>Propulsé par Next.js</span>
             </div>
+            {process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.startsWith("pk_test_") && (
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-4 text-center">
+                <span className="inline-block rounded bg-amber-50 border border-amber-200 text-amber-900 px-2 py-1">
+                  Site de démonstration — paiements fictifs (mode test Stripe)
+                </span>
+                <span className="ml-2 text-amber-900/90">
+                  <a className="underline" href="/a-propos-du-mode-demo">En savoir plus</a>
+                </span>
+              </div>
+            )}
           </div>
         </footer>
       </body>

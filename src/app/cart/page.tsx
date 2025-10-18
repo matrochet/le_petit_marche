@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCartStore } from "@/store/cart-store";
+import DemoNotice from "@/components/demo-notice";
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("fr-FR", {
@@ -88,6 +89,8 @@ export default function CartPage() {
           Vider le panier
         </button>
       </div>
+
+      <DemoNotice />
 
       <div className="space-y-6">
         {items.map((item) => (
