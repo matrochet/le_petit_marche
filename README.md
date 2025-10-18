@@ -117,3 +117,25 @@ Le studio s’ouvre (http://localhost:5555 par défaut) et permet d’inspecter/
 - Alternatives:
   - Extension VS Code “SQLite Viewer/Explorer”: ouvrez `prisma/dev.db` et explorez les tables
   - DB Browser for SQLite (application desktop): Fichier → Ouvrir → `prisma/dev.db`
+
+## Base de données en production (Neon Postgres)
+
+SQLite n’est pas adapté aux environnements serverless. Pour la production, migrez vers Postgres managé (ex.: Neon).
+
+Étapes (résumé):
+
+1. Créez un projet Neon (https://neon.tech). Récupérez l’URL de connexion (idéalement, la chaîne de connexion poolée) et définissez-la dans `DATABASE_URL`.
+2. Mettez à jour `prisma/schema.prisma` pour utiliser `provider = "postgresql"` et `url = env("DATABASE_URL")` (déjà fait dans ce repo).
+3. Exécutez les migrations en local ou en CI:
+
+```bash
+npm run db:migrate:dev    # crée une migration et l’applique en dev
+# ou, en prod/CI:
+npm run db:migrate:deploy  # applique les migrations existantes
+```
+
+4. Mettez la même `DATABASE_URL` dans Vercel (Project → Settings → Environment Variables) pour Preview/Production.
+
+5. NextAuth: quand `DATABASE_URL` est présent, l’adaptateur Prisma est activé automatiquement et les comptes OAuth sont stockés en DB.
+
+6. (Optionnel) Seed de données de démo: adaptez `prisma/seed.ts` pour Postgres si nécessaire, puis exécutez `npm run seed`.
