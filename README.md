@@ -106,7 +106,7 @@ Pensez à configurer les variables d’environnement Stripe en prod.
 
 ### Mode portfolio (clés Stripe de test en prod)
 
-Ce projet peut être déployé en production avec des clés Stripe de test (pk_test_/sk_test_) afin de présenter le flux de paiement sans encaisser de vrais paiements. Implications :
+Ce projet peut être déployé en production avec des clés Stripe de test (pk*test*/sk*test*) afin de présenter le flux de paiement sans encaisser de vrais paiements. Implications :
 
 - Les cartes réelles échouent; utilisez les cartes de test Stripe (ex : 4242 4242 4242 4242).
 - Le tableau de bord Stripe doit être en « Test mode » pour voir les paiements.
