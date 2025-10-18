@@ -7,12 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/api/", // API routes should not be indexed
-          "/cart", // panier
-          "/checkout", // paiement
-          "/_next/", // Next.js internal assets
-        ],
+        disallow: ["/api/", "/cart", "/checkout", "/_next/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

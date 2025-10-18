@@ -10,9 +10,9 @@ export function getStripe(): Stripe {
       // Throw only when actually used (e.g., in an API route), not at import time
       throw new Error("Missing STRIPE_SECRET_KEY in environment");
     }
-    stripeClient = new Stripe(key, {
-      apiVersion: "2025-08-27.basil",
-    });
+    // Use Stripe's default API version configured on the account to avoid
+    // build/runtime errors when an explicit future version is not supported.
+    stripeClient = new Stripe(key);
   }
   return stripeClient;
 }

@@ -16,15 +16,25 @@ export const metadata = {
   description: "Découvrez l'ensemble de nos produits frais et locaux.",
 };
 
+// Avoid build-time prerender and tolerate missing DB in serverless
+export const dynamic = "force-dynamic";
+
 export default async function ProduitsPage({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = (await searchParams) || {};
   const category = typeof params.category === "string" ? params.category : undefined;
   const where = category ? { category } : undefined;
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({ where, orderBy: { name: "asc" } }),
-    prisma.product.findMany({ select: { category: true } }),
-  ]);
-  const distinctCategories = Array.from(new Set(categories.map((c) => c.category))).sort();
+  let products: Array<{ id: string; name: string; imageUrl: string; price: number; category: string }> = [];
+  let distinctCategories: string[] = [];
+  try {
+    const [p, cats] = await Promise.all([
+      prisma.product.findMany({ where, orderBy: { name: "asc" } }),
+      prisma.product.findMany({ select: { category: true } }),
+    ]);
+    products = p;
+    distinctCategories = Array.from(new Set(cats.map((c) => c.category))).sort();
+  } catch (err) {
+    console.warn("[produits] DB unavailable, rendering empty state:", (err as Error)?.message || err);
+  }
 
   return (
     <div className="min-h-screen">

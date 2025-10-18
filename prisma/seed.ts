@@ -1,8 +1,21 @@
 import { PrismaClient } from "../src/generated/prisma";
 
-const prisma = new PrismaClient();
+// Prefer direct (non-pooled) connection for migrations/seeding to avoid pooler limitations
+const datasourceUrl = process.env.DIRECT_DATABASE_URL || process.env.DATABASE_URL;
+const prisma = new PrismaClient(
+  datasourceUrl
+    ? // Recent Prisma supports passing a datasource URL override at top-level
+      // https://www.prisma.io/docs/orm/reference/prisma-client-reference#datasourceurl
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ({ datasourceUrl } as any)
+    : undefined
+);
 
 async function main() {
+  console.log("Seeding database...", {
+    provider: "postgresql",
+    hasDatabaseUrl: !!process.env.DATABASE_URL,
+  });
   // Optionally clear existing data for a clean seed
   await prisma.product.deleteMany({});
 

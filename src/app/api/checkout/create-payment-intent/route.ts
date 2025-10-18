@@ -13,10 +13,10 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     const stripe = getStripe();
-    // Basic origin check (helps CSRF mitigation in addition to same-site cookies)
+    // Basic origin check (helps CSRF mitigation). Enforce only if a base URL is configured.
     const origin = req.headers.get("origin") || req.headers.get("referer") || "";
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    if (origin && !origin.startsWith(baseUrl)) {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    if (baseUrl && origin && !origin.startsWith(baseUrl)) {
       return NextResponse.json({ error: "Origine non autorisée" }, { status: 403 });
     }
 
@@ -77,6 +77,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (err) {
     console.error("/api/checkout/create-payment-intent", err);
-    return NextResponse.json({ error: "Erreur interne" }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Erreur interne";
+    // Surface common misconfigurations
+    if (message.includes("STRIPE_SECRET_KEY")) {
+      return NextResponse.json({ error: "Stripe mal configuré: STRIPE_SECRET_KEY manquant" }, { status: 500 });
+    }
+    return NextResponse.json({ error: message || "Erreur interne" }, { status: 500 });
   }
 }

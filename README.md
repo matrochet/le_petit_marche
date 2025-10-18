@@ -84,10 +84,12 @@ GOOGLE_CLIENT_SECRET=...
 ```
 
 Callbacks de redirection à configurer sur les consoles OAuth :
+
 - GitHub: http://localhost:3000/api/auth/callback/github
 - Google: http://localhost:3000/api/auth/callback/google
 
 UI :
+
 - Page dédiée : `/signin` avec boutons GitHub et Google
 - Header : bouton « Se connecter » (ou état connecté + « Se déconnecter »)
 
