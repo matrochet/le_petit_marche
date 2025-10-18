@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import CartLink from "@/components/cart-link";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -45,12 +45,12 @@ export default function SiteHeader() {
                 </button>
               </>
             ) : (
-              <button
-                onClick={() => signIn("github", { callbackUrl: "/" })}
+              <Link
+                href="/signin"
                 className="inline-flex items-center rounded bg-emerald-600 px-3 py-1 text-white hover:bg-emerald-700"
               >
                 Se connecter
-              </button>
+              </Link>
             )}
           </div>
           {/* Burger (mobile) */}
@@ -106,12 +106,13 @@ export default function SiteHeader() {
                   Se déconnecter
                 </button>
               ) : (
-                <button
-                  className="w-full text-left py-2 px-2 rounded hover:bg-emerald-50"
-                  onClick={() => { setOpen(false); signIn("github", { callbackUrl: "/" }); }}
+                <Link
+                  href="/signin"
+                  className="w-full block py-2 px-2 rounded hover:bg-emerald-50"
+                  onClick={() => setOpen(false)}
                 >
                   Se connecter
-                </button>
+                </Link>
               )}
             </div>
           </nav>
