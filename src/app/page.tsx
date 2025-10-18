@@ -8,16 +8,24 @@ export const metadata = {
   description: "Le Petit Marché — produits frais et locaux.",
 };
 
+// Ensure this page is never pre-rendered at build time (DB may be unavailable on Vercel during build)
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
-  // Get featured products for the landing page
-  const featured = await prisma.product.findMany({
-    where: { featured: true },
-    orderBy: { name: "asc" },
-    take: 6,
-  });
-  // Get distinct categories
-  const all = await prisma.product.findMany({ select: { category: true } });
-  const categories = Array.from(new Set(all.map((a) => a.category))).sort();
+  // Fetch data with graceful fallbacks if the database is unavailable (e.g., during static build)
+  let featured: Array<{ id: string; name: string; category: string; imageUrl: string }> = [];
+  let categories: string[] = [];
+  try {
+    featured = await prisma.product.findMany({
+      where: { featured: true },
+      orderBy: { name: "asc" },
+      take: 6,
+    });
+    const all = await prisma.product.findMany({ select: { category: true } });
+    categories = Array.from(new Set(all.map((a) => a.category))).sort();
+  } catch (err) {
+    console.warn("[home] DB not available at build/runtime, rendering with empty lists:", (err as Error)?.message || err);
+  }
 
   return (
     <div className="min-h-screen">
